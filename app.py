@@ -193,11 +193,12 @@ class LegalAnalyzer:
         return filtered_clauses[:8]  # Limit to top 8 clauses
     
     def is_clause_start(self, sentence: str) -> bool:
-        """Check if sentence likely starts a new clause"""
+        """Check if sentence likely starts a new clause (enhanced)"""
         clause_indicators = [
-            r'^\d+\.', r'^\([a-z]\)', r'^[A-Z][A-Z\s]+:', 
+            r'^\d+\.', r'^\([a-z]\)', r'^[A-Z][A-Z\s]+:',
             r'^WHEREAS', r'^NOW THEREFORE', r'^Section \d+',
-            r'^Article \d+', r'^Clause \d+', r'^\d+\.\d+'
+            r'^Article \d+', r'^Clause \d+', r'^\d+\.\d+',
+            r'^THE PARTIES AGREE', r'^IT IS AGREED', r'^IN WITNESS WHEREOF'
         ]
         
         sentence_clean = sentence.strip()
@@ -205,6 +206,10 @@ class LegalAnalyzer:
             if re.match(pattern, sentence_clean):
                 return True
         
+        # Check for paragraph headings that are capitalized
+        if len(sentence_clean.split()) < 8 and sentence_clean.isupper():
+            return True
+            
         return False
     
     def contains_legal_content(self, text: str) -> bool:
