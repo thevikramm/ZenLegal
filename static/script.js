@@ -701,7 +701,7 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
-// Advanced Animation CSS (inject dynamically)
+
 const advancedAnimations = `
 @keyframes ripple {
     from { transform: scale(0); opacity: 1; }
@@ -756,12 +756,10 @@ const advancedAnimations = `
 }
 `;
 
-// Inject advanced animations
-const styleSheet = document.createElement('style');
+ const styleSheet = document.createElement('style');
 styleSheet.textContent = advancedAnimations;
 document.head.appendChild(styleSheet);
 
-// Performance optimization: debounce function
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -774,8 +772,7 @@ function debounce(func, wait) {
     };
 }
 
-// Initialize tooltips for better UX
-function initializeTooltips() {
+ function initializeTooltips() {
     const tooltipElements = document.querySelectorAll('[data-tooltip]');
     
     tooltipElements.forEach(element => {
@@ -824,17 +821,14 @@ function hideTooltip(event) {
     }
 }
 
-// Initialize everything when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
+ document.addEventListener('DOMContentLoaded', () => {
     initializeTooltips();
     
-    // Test backend connection on load
-    setTimeout(() => {
+     setTimeout(() => {
         testBackendConnection();
     }, 1000);
     
-    // Add subtle entrance animations to page elements
-    setTimeout(() => {
+     setTimeout(() => {
         const heroSection = document.querySelector('.hero-section');
         const uploadSection = document.querySelector('.upload-section');
         
@@ -847,7 +841,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
-// Expose global functions for debugging
+ 
 window.LegalZenUI = {
     displayResults,
     showProgress,
