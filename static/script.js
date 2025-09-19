@@ -1,4 +1,3 @@
-// DOM Elements
 const fileInput = document.getElementById('fileInput');
 const fileUploadArea = document.getElementById('fileUploadArea');
 const selectedFile = document.getElementById('selectedFile');
@@ -15,12 +14,10 @@ const questionInput = document.getElementById('questionInput');
 const askQuestion = document.getElementById('askQuestion');
 const qaHistory = document.getElementById('qaHistory');
 
-// State Management
 let currentDocument = null;
 let currentSessionKey = null;
 let isProcessing = false;
 
-// Initialize Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
     initializeFileUpload();
     initializeFormSubmission();
@@ -28,24 +25,19 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeSmoothAnimations();
 });
 
-// File Upload Functionality
 function initializeFileUpload() {
-    // Click to browse files
     fileUploadArea.addEventListener('click', () => {
         if (!isProcessing) {
             fileInput.click();
         }
     });
 
-    // File selection change
     fileInput.addEventListener('change', handleFileSelection);
 
-    // Drag and drop functionality
     fileUploadArea.addEventListener('dragover', handleDragOver);
     fileUploadArea.addEventListener('dragleave', handleDragLeave);
     fileUploadArea.addEventListener('drop', handleFileDrop);
 
-    // Remove file functionality
     removeFile.addEventListener('click', clearSelectedFile);
 }
 
@@ -100,7 +92,6 @@ function handleFileDrop(event) {
     if (files.length > 0) {
         const file = files[0];
         if (isValidFileType(file)) {
-            // Manually set the file to the input
             const dt = new DataTransfer();
             dt.items.add(file);
             fileInput.files = dt.files;
@@ -121,7 +112,6 @@ function displaySelectedFile(file) {
     selectedFile.style.display = 'block';
     selectedFile.classList.add('fade-in');
     
-    // Add success state to upload area
     fileUploadArea.classList.add('success-state');
     
     currentDocument = file;
@@ -136,7 +126,6 @@ function clearSelectedFile() {
     currentDocument = null;
     currentSessionKey = null;
     
-    // Clear any error states
     fileUploadArea.classList.remove('error-state');
 }
 
@@ -150,7 +139,6 @@ function disableSubmitButton() {
     submitBtn.classList.remove('interactive');
 }
 
-// Form Submission and Processing
 function initializeFormSubmission() {
     documentForm.addEventListener('submit', handleFormSubmission);
 }
@@ -170,12 +158,10 @@ async function handleFormSubmission(event) {
     formData.append('document', currentDocument);
     
     try {
-        // Simulate processing steps for better UX
         await simulateProcessingSteps();
         
         console.log('Sending request to Flask backend...');
         
-        // Submit to Flask backend
         const response = await fetch('/', {
             method: 'POST',
             body: formData
@@ -187,7 +173,6 @@ async function handleFormSubmission(event) {
             const result = await response.json();
             console.log('Analysis result:', result);
             
-            // Store session key for Q&A
             if (result.session_key) {
                 currentSessionKey = result.session_key;
             }
@@ -228,7 +213,6 @@ function showProgress() {
     progressContainer.classList.add('fade-in');
     updateProgress(0, 'Initializing...');
     
-    // Disable form during processing
     submitBtn.disabled = true;
     fileUploadArea.style.pointerEvents = 'none';
 }
@@ -243,7 +227,6 @@ function hideProgress() {
         progressContainer.style.display = 'none';
         progressContainer.classList.remove('fade-in');
         
-        // Re-enable form
         if (currentDocument) {
             enableSubmitButton();
         }
@@ -251,36 +234,29 @@ function hideProgress() {
     }, 1000);
 }
 
-// Results Display
 function displayResults(data) {
-    // Clear any previous results
     summaryContent.innerHTML = '';
     clauseAccordion.innerHTML = '';
     qaHistory.innerHTML = '';
     
-    // Show results section with animation
     resultsSection.style.display = 'block';
     resultsSection.classList.add('fade-in');
     
-    // Display summary
     if (data.summary) {
         summaryContent.innerHTML = `<p>${data.summary}</p>`;
         animateTextReveal(summaryContent);
     }
     
-    // Display clauses
     if (data.clauses && data.clauses.length > 0) {
         generateAccordion(data.clauses);
     } else {
         clauseAccordion.innerHTML = '<p>No specific clauses identified in this document.</p>';
     }
     
-    // Show document type and key points if available
     if (data.document_type) {
         console.log('Document type detected:', data.document_type);
     }
     
-    // Scroll to results smoothly
     setTimeout(() => {
         resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 500);
@@ -293,7 +269,6 @@ function generateAccordion(clauses) {
         const accordionItem = createAccordionItem(clause, index);
         clauseAccordion.appendChild(accordionItem);
         
-        // Stagger animation
         setTimeout(() => {
             accordionItem.classList.add('fade-in');
         }, index * 100);
@@ -328,7 +303,6 @@ function createAccordionItem(clause, index) {
         </div>
     `;
     
-    // Add click handler for accordion
     const header = item.querySelector('.accordion-header');
     header.addEventListener('click', () => toggleAccordion(header, index));
     
@@ -340,7 +314,6 @@ function toggleAccordion(header, index) {
     const icon = header.querySelector('.accordion-icon');
     const isActive = header.classList.contains('active');
     
-    // Close all other accordions
     document.querySelectorAll('.accordion-header.active').forEach(activeHeader => {
         if (activeHeader !== header) {
             activeHeader.classList.remove('active');
@@ -349,7 +322,6 @@ function toggleAccordion(header, index) {
         }
     });
     
-    // Toggle current accordion
     if (isActive) {
         header.classList.remove('active');
         content.classList.remove('active');
@@ -359,14 +331,12 @@ function toggleAccordion(header, index) {
         content.classList.add('active');
         icon.style.transform = 'rotate(180deg)';
         
-        // Smooth scroll to active accordion
         setTimeout(() => {
             header.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 300);
     }
 }
 
-// Q&A Functionality
 function initializeQuestionHandler() {
     askQuestion.addEventListener('click', handleQuestionSubmit);
     questionInput.addEventListener('keypress', (event) => {
@@ -376,7 +346,6 @@ function initializeQuestionHandler() {
         }
     });
     
-    // Auto-resize and reactive input
     questionInput.addEventListener('input', handleQuestionInput);
 }
 
@@ -404,13 +373,11 @@ async function handleQuestionSubmit() {
         return;
     }
     
-    // Add question to history immediately
     addQuestionToHistory(question, 'Thinking...');
     questionInput.value = '';
     handleQuestionInput();
     
     try {
-        // Send question to backend with session key
         const formData = new FormData();
         formData.append('question', question);
         formData.append('session_key', currentSessionKey);
@@ -449,7 +416,6 @@ function addQuestionToHistory(question, answer) {
     
     qaHistory.appendChild(qaItem);
     
-    // Scroll to latest question
     setTimeout(() => {
         qaItem.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }, 100);
@@ -464,7 +430,6 @@ function updateLatestAnswer(answer) {
     }
 }
 
-// Utility Functions
 function animateTextReveal(element) {
     element.style.opacity = '0';
     element.style.transform = 'translateY(10px)';
@@ -479,7 +444,6 @@ function animateTextReveal(element) {
 function showError(message) {
     console.error('Error:', message);
     
-    // Create temporary error notification
     const errorDiv = document.createElement('div');
     errorDiv.className = 'error-notification';
     errorDiv.style.cssText = `
@@ -537,7 +501,6 @@ function showSuccess(message) {
     }, 3000);
 }
 
-// Smooth Animations and Micro-interactions
 function initializeSmoothAnimations() {
     addHoverEffects();
     initializeScrollAnimations();
@@ -574,7 +537,6 @@ function initializeScrollAnimations() {
         });
     }, observerOptions);
     
-    // Observe elements that should animate on scroll
     document.querySelectorAll('.summary-panel, .clauses-panel, .qa-panel').forEach(el => {
         observer.observe(el);
     });
@@ -592,7 +554,6 @@ function initializeTypingIndicator() {
     });
 }
 
-// Advanced UI Enhancements
 function createRippleEffect(event, element) {
     const ripple = document.createElement('span');
     const rect = element.getBoundingClientRect();
@@ -624,18 +585,15 @@ function createRippleEffect(event, element) {
     }, 600);
 }
 
-// Add ripple effect to buttons
 document.addEventListener('click', (event) => {
     if (event.target.matches('.submit-btn, .ask-btn') && !event.target.disabled) {
         createRippleEffect(event, event.target);
     }
 });
 
-// Demo/Testing Functions
 function loadDemoDocument() {
     console.log('Loading demo document...');
     
-    // Simulate demo document upload
     currentSessionKey = 'demo_session';
     
     fetch('/demo')
@@ -651,7 +609,6 @@ function loadDemoDocument() {
         });
 }
 
-// Debug function to check backend connectivity
 async function testBackendConnection() {
     try {
         const response = await fetch('/health');
@@ -668,9 +625,7 @@ async function testBackendConnection() {
     }
 }
 
-// Keyboard Shortcuts
 document.addEventListener('keydown', (event) => {
-    // Ctrl/Cmd + U to upload file
     if ((event.ctrlKey || event.metaKey) && event.key === 'u') {
         event.preventDefault();
         if (!isProcessing) {
@@ -678,23 +633,19 @@ document.addEventListener('keydown', (event) => {
         }
     }
     
-    // Escape to clear file
     if (event.key === 'Escape' && currentDocument) {
         clearSelectedFile();
     }
     
-    // Ctrl/Cmd + Enter to submit form
     if ((event.ctrlKey || event.metaKey) && event.key === 'Enter' && currentDocument && !isProcessing) {
         documentForm.dispatchEvent(new Event('submit'));
     }
     
-    // D for demo (development shortcut)
     if (event.key === 'd' && event.ctrlKey && event.shiftKey) {
         event.preventDefault();
         loadDemoDocument();
     }
     
-    // T for backend test (development shortcut)
     if (event.key === 't' && event.ctrlKey && event.shiftKey) {
         event.preventDefault();
         testBackendConnection();
@@ -756,7 +707,7 @@ const advancedAnimations = `
 }
 `;
 
- const styleSheet = document.createElement('style');
+const styleSheet = document.createElement('style');
 styleSheet.textContent = advancedAnimations;
 document.head.appendChild(styleSheet);
 
@@ -772,7 +723,7 @@ function debounce(func, wait) {
     };
 }
 
- function initializeTooltips() {
+function initializeTooltips() {
     const tooltipElements = document.querySelectorAll('[data-tooltip]');
     
     tooltipElements.forEach(element => {
@@ -821,14 +772,14 @@ function hideTooltip(event) {
     }
 }
 
- document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     initializeTooltips();
     
-     setTimeout(() => {
+    setTimeout(() => {
         testBackendConnection();
     }, 1000);
     
-     setTimeout(() => {
+    setTimeout(() => {
         const heroSection = document.querySelector('.hero-section');
         const uploadSection = document.querySelector('.upload-section');
         
@@ -841,7 +792,6 @@ function hideTooltip(event) {
     }, 100);
 });
 
- 
 window.LegalZenUI = {
     displayResults,
     showProgress,

@@ -9,7 +9,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Header with Buddha reference -->
     <header class="header">
         <div class="container">
             <div class="logo-section">
@@ -22,16 +21,13 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <!-- Hero Section -->
             <section class="hero-section">
                 <h2 class="hero-title">Transform Complex Legal Documents</h2>
                 <p class="hero-subtitle">Upload your legal document and receive clear, understandable explanations instantly</p>
             </section>
 
-            <!-- Upload Section -->
             <section class="upload-section">
                 <form id="documentForm" action="/" method="post" enctype="multipart/form-data">
                     <div class="upload-container">
@@ -64,7 +60,6 @@
                     </div>
                 </form>
 
-                <!-- Progress Bar -->
                 <div class="progress-container" id="progressContainer" style="display: none;">
                     <div class="progress-bar">
                         <div class="progress-fill" id="progressFill"></div>
@@ -73,31 +68,25 @@
                 </div>
             </section>
 
-            <!-- Results Section -->
             <section class="results-section" id="resultsSection" style="display: none;">
-                <!-- Summary Panel -->
                 <div class="summary-panel">
                     <h3 class="section-title">
                         <i class="fas fa-lightbulb"></i>
                         Document Summary
                     </h3>
                     <div class="summary-content" id="summaryContent">
-                        <!-- AI-generated summary will be inserted here -->
                     </div>
                 </div>
 
-                <!-- Clause Explanations -->
                 <div class="clauses-panel">
                     <h3 class="section-title">
                         <i class="fas fa-list-ul"></i>
                         Clause Explanations
                     </h3>
                     <div class="accordion-container" id="clauseAccordion">
-                        <!-- Accordion items will be generated dynamically -->
                     </div>
                 </div>
 
-                <!-- Interactive Q&A -->
                 <div class="qa-panel">
                     <h3 class="section-title">
                         <i class="fas fa-question-circle"></i>
@@ -110,14 +99,12 @@
                         </button>
                     </div>
                     <div class="qa-history" id="qaHistory">
-                        <!-- Q&A history will appear here -->
                     </div>
                 </div>
             </section>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
